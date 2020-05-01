@@ -2,6 +2,10 @@
    
   include 'function.php';
 
+    if ($_SESSION['nip'] == '9012') {
+    echo "TEST";
+  }
+
     if(isset($_SESSION['jabatan']) && isset($_SESSION['id'])){
   ?>
 <!DOCTYPE html>
@@ -184,6 +188,13 @@
           </a>
         </li>
 
+          <li>
+          <a href="?page=absensi">
+            <i class="fa fa-book"></i>
+            <span>Absensi</span>
+          </a>
+        </li>
+
         <li>
           <a href="?page=ekstrakulikuler">
             <i class="fa fa-soccer-ball-o"></i>
@@ -191,8 +202,8 @@
           </a>
         </li>
 
-        <li class="treeview">
-          <a href="#">
+        <li>
+          <a href="?page=nilai">
             <i class="fa fa-edit"></i>
             <span>Nilai Siswa</span>
           </a>
@@ -205,15 +216,27 @@
           </a>
         </li>
 
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-book"></i>
-            <span>Laporan</span>
+       <li class="treeview">
+          <a href="index.php">
+            <i class="fa fa-briefcase"></i> <span>Laporan</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
           </a>
+          <ul class="treeview-menu">
+          <li><a href=""><i class="fa fa-circle-o"></i>Data Siswa</a></li>
+          <li><a href=""><i class="fa fa-circle-o"></i>Data Guru</a></li>
+          <li><a href=""><i class="fa fa-circle-o"></i>Nilai Rata - Rata Mapel</a></li>
+          <li><a href=""><i class="fa fa-circle-o"></i>Nilai Rata - Rata Kelas</a></li>
+          <li><a href=""><i class="fa fa-circle-o"></i>Perbandingan Nilai Mapel</a></li>
+          <li><a href=""><i class="fa fa-circle-o"></i>Perbandingan Nilai Kelas</a></li>
+          <li><a href=""><i class="fa fa-circle-o"></i>Data Peringkat Nilai Siswa</a></li>
+          <li><a href=""><i class="fa fa-circle-o"></i>Grafik Nilai</a></li>
+      
+          </ul>
         </li>
-
-        <li class="treeview">
-          <a href="#">
+        <li>
+          <a href="?page=setup">
             <i class="fa fa-gears"></i>
             <span>Setup Tanggal</span>
           </a>
@@ -580,12 +603,32 @@ if (isset($_GET['add']) && isset($_GET['tipe_data'])) {
         },
         dataType:"json",
         type: "POST",
-        success: function(data){
+        success: function(data){          
            document.getElementById("jurusan").innerHTML = "<option value='"+ data[0].id_jurusan +"' selected readonly>" + data[0].nama_jurusan +"</option>";
 
            document.getElementById("ruangan").innerHTML = "<option value='"+ data[0].ruangan +"' selected readonly>" + data[0].ruangan +"</option>";
            $('#jurusan').attr("readonly", "true");
            $('#ruangan').attr("readonly", "true");
+
+        }
+    });
+});
+</script>
+<script type="text/javascript">
+  $('#pilih-kelas-edit').change(function(){
+    $.ajax({
+        url: "http://localhost/siakad/page/kelas_siswa/kelas_controller.php",
+        data: { 
+          "value_kelas_edit": $("#pilih-kelas-edit").val() 
+        },
+        dataType:"json",
+        type: "POST",
+        success: function(data){          
+           document.getElementById("jurusan-edit").innerHTML = "<option value='"+ data[0].id_jurusan +"' selected readonly>" + data[0].nama_jurusan +"</option>";
+
+           document.getElementById("ruangan-edit").innerHTML = "<option value='"+ data[0].ruangan +"' selected readonly>" + data[0].ruangan +"</option>";
+           $('#jurusan-edit').attr("readonly", "true");
+           $('#ruangan-edit').attr("readonly", "true");
 
         }
     });

@@ -162,6 +162,18 @@ function get_all_guru()
 	return $rows;
 }
 
+function get_all_guruxx()
+{
+	global $koneksi;
+
+	$result = mysqli_query($koneksi,"SELECT * FROM guru ORDER BY nama_guru ASC");
+	$rows = [];
+	while ($data = mysqli_fetch_array($result)) {
+		$rows[] = $data;
+	}
+	return $rows;
+}
+
 function tambah_guru()
 {
 	global $koneksi;
@@ -453,13 +465,29 @@ function get_kelas_siswa()
 	global $koneksi;
 
 	$result = mysqli_query($koneksi,
-		"SELECT kelas.nama_kelas, guru.nama_guru, tahun_ajaran.tahun_ajaran, jurusan.nama_jurusan, kelas.ruangan, kelas_siswa.jumlah_siswa, kelas_siswa.id_kls_siswa, kelas_siswa.nip, kelas_siswa.id_thnajr, count(kelompok_siswa.id_kls_siswa) as jumlah_siswa from kelas_siswa 
+		"SELECT kelas.nama_kelas, guru.nama_guru, tahun_ajaran.tahun_ajaran, jurusan.nama_jurusan, kelas.ruangan, kelas_siswa.jumlah_siswa, kelas_siswa.id_kls_siswa,kelas.id_kelas, kelas.id_jurusan, kelas_siswa.nip, kelas_siswa.id_thnajr, count(kelompok_siswa.id_kls_siswa) as jumlah_siswa from kelas_siswa 
 		JOIN guru ON kelas_siswa.nip=guru.nip
 		JOIN tahun_ajaran ON kelas_siswa.id_thnajr=tahun_ajaran.id_thnajr
 		JOIN kelas on kelas_siswa.id_kelas = kelas.id_kelas
 		join jurusan on kelas.id_jurusan = jurusan.id_jurusan
 		left join kelompok_siswa on kelompok_siswa.id_kls_siswa = kelas_siswa.id_kls_siswa
 group by kelas.nama_kelas, guru.nama_guru, tahun_ajaran.tahun_ajaran, jurusan.nama_jurusan, kelas.ruangan, kelas_siswa.jumlah_siswa, kelas_siswa.id_kls_siswa, kelas_siswa.nip, kelas_siswa.id_thnajr");
+
+
+	$rows = [];
+	while ($data = mysqli_fetch_array($result)) {
+		$rows[] = $data;
+	}
+	return $rows;
+}
+
+function get_kelas_siswaxx()
+{
+	global $koneksi;
+
+	$result = mysqli_query($koneksi,"SELECT  kelas.nama_kelas, kelas_siswa.id_kls_siswa, kelas.ruangan from kelas_siswa
+	join kelas on kelas_siswa.id_kelas = kelas.id_kelas
+	 ");
 
 
 	$rows = [];
@@ -504,6 +532,8 @@ function ubah_kelas_siswa()
 	$nama_kelas = $_POST['txt_nama_kelas'];
 	$guru = $_POST['txt_wali_kelas'];
 	$tahun_ajaran = $_POST['txt_tahun_ajaran'];
+	$jurusan = $_POST['txt_jurusan'];
+	$ruangan = $_POST['txt_ruangan'];
 
 	$cek_query = mysqli_query($koneksi,"SELECT * FROM kelas_siswa WHERE id_kelas='$nama_kelas' && nip='$guru' && tahun_ajaran='$tahun_ajaran'");
 	if (mysqli_num_rows($cek_query) < 1 ) {
@@ -656,10 +686,11 @@ function get_jadwal_pelajaran()
 	global $koneksi;
 
 	$result = mysqli_query($koneksi,
-		"SELECT mata_pelajaran.id_mapel, mata_pelajaran.nama_mapel, kelas_siswa.id_kls_siswa, kelas_siswa.nip, kelas_siswa.id_kelas, kelas_siswa.ruangan, jadwal_pelajaran.hari, jadwal_pelajaran.jam_mulai, jadwal_pelajaran.jam_selesai  from jadwal_pelajaran 
+		"SELECT jadwal_pelajaran.id_jdwl_pljr, mata_pelajaran.id_mapel, mata_pelajaran.nama_mapel, kelas_siswa.id_kls_siswa,guru.nama_guru, jadwal_pelajaran.nip, kelas_siswa.id_kelas, jadwal_pelajaran.hari, jadwal_pelajaran.jam_mulai, kelas.nama_kelas, kelas.ruangan, jadwal_pelajaran.jam_selesai  from jadwal_pelajaran 
 		JOIN mata_pelajaran ON jadwal_pelajaran.id_mapel=mata_pelajaran.id_mapel
-		JOIN kelas_siswa ON jadwal_pelajaran.id_kls_siswa=kelas_siswa.id_kls_siswa")
-		;
+		join guru on jadwal_pelajaran.nip = guru.nip
+		JOIN kelas_siswa ON jadwal_pelajaran.id_kls_siswa=kelas_siswa.id_kls_siswa
+		join kelas on kelas_siswa.id_kelas	=kelas.id_kelas	");
 
 
 	$rows = [];
@@ -684,11 +715,11 @@ function tambah_jadwal_pelajaran()
 	$jam_selesai = $_POST['txt_jam_selesai'];
 
 
-	$cek_query = mysqli_query($koneksi,"SELECT * FROM jadwal_pelajaran WHERE id_kelas='$nama_kelas'");
+	$cek_query = mysqli_query($koneksi,"SELECT * FROM jadwal_pelajaran WHERE id_kls_siswa='$nama_kelas'");
 
 	if (mysqli_num_rows($cek_query) < 1 ) {
 
-		$result = mysqli_query($koneksi,"INSERT INTO jadwal_pelajaran SET id_mapel='$nama_mapel', nip='$guru', id_kelas='$nama_kelas',hari='$hari', jam_mulai='$jam_mulai',jam_selesai='$jam_selesai'");
+		$result = mysqli_query($koneksi,"INSERT INTO jadwal_pelajaran SET id_mapel='$nama_mapel', nip='$guru', id_kls_siswa='$nama_kelas',hari='$hari', jam_mulai='$jam_mulai',jam_selesai='$jam_selesai'");
 		if ($result > 0) {
 			echo "<script>alert('Data kelas siswa berhasil disimpan !');window.location.href=window.location.href;</script>";
 		}else{
@@ -698,6 +729,35 @@ function tambah_jadwal_pelajaran()
 		echo "<script>alert('Error, Data sudah ada !');</script>";
 	}
 }
+
+function ubah_jadwal_pelajaran()
+{
+
+	global $koneksi;
+	
+	$id_jdwl_pljr = $_POST['txt_id_jdwl_pljr'];
+	$nama_mapel = $_POST['txt_nama_mapel'];
+	$nama_kelas = $_POST['txt_nama_kelas'];
+	$guru = $_POST['txt_nama_guru'];
+	$ruangan = $_POST['txt_ruangan'];
+	$hari = $_POST['txt_hari'];
+	$jam_mulai = $_POST['txt_jam_mulai'];
+	$jam_selesai = $_POST['txt_jam_selesai'];
+
+
+
+		$result = mysqli_query($koneksi,"UPDATE jadwal_pelajaran SET id_mapel='$nama_mapel', nip='$guru', id_kls_siswa='$nama_kelas', hari='$hari', jam_mulai='$jam_mulai', jam_selesai='$jam_selesai' where id_jdwl_pljr='$id_jdwl_pljr'");
+		if ($result > 0) {
+			echo "<script>alert('Data kelas siswa berhasil diubah !');window.location.href=window.location.href;</script>";
+		}else{
+			echo "<script>alert('Gagal mengubah data kelas siswa !');</script>";
+		}
+		
+	
+}
+
+
+
 
 function get_all_ekskul()
 {

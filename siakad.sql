@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2020 at 04:10 AM
+-- Generation Time: May 01, 2020 at 09:47 AM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.7
 
@@ -21,6 +21,20 @@ SET time_zone = "+00:00";
 --
 -- Database: `siakad`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `absensi`
+--
+
+CREATE TABLE `absensi` (
+  `id_absensi` int(11) NOT NULL,
+  `id_kls_siswa` int(11) NOT NULL,
+  `sakit` int(11) NOT NULL,
+  `ijin` int(11) NOT NULL,
+  `tanpa_keterangan` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -86,6 +100,14 @@ CREATE TABLE `jadwal_pelajaran` (
   `jam_selesai` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `jadwal_pelajaran`
+--
+
+INSERT INTO `jadwal_pelajaran` (`id_jdwl_pljr`, `id_mapel`, `id_kls_siswa`, `nip`, `hari`, `jam_mulai`, `jam_selesai`) VALUES
+(1, 1, 5, '0094', 'senin', '00:00:07', '00:00:08'),
+(3, 2, 10, '9012', 'kamis', '22:22:00', '12:12:00');
+
 -- --------------------------------------------------------
 
 --
@@ -104,7 +126,8 @@ CREATE TABLE `jurusan` (
 INSERT INTO `jurusan` (`id_jurusan`, `nama_jurusan`) VALUES
 (1, 'RPL'),
 (2, 'MM'),
-(3, 'TKJ');
+(3, 'TKJ'),
+(4, 'masak ');
 
 -- --------------------------------------------------------
 
@@ -128,7 +151,8 @@ INSERT INTO `kelas` (`id_kelas`, `id_jurusan`, `nama_kelas`, `ruangan`) VALUES
 (2, 2, 'X MM 2', 102),
 (3, 1, 'X RPL 1', 103),
 (4, 1, 'X RPL 2', 104),
-(5, 3, 'X TKJ 1', 105);
+(5, 3, 'X TKJ 1', 105),
+(6, 3, 'X TKJ 2', 106);
 
 -- --------------------------------------------------------
 
@@ -153,7 +177,8 @@ INSERT INTO `kelas_siswa` (`id_kls_siswa`, `id_thnajr`, `id_kelas`, `nip`, `juml
 (6, 107, 2, '9012', 0),
 (7, 107, 3, '0094', 0),
 (8, 107, 4, '9012', 0),
-(9, 107, 5, '0094', 0);
+(9, 107, 5, '0094', 0),
+(10, 107, 6, '0094', 0);
 
 -- --------------------------------------------------------
 
@@ -173,7 +198,9 @@ CREATE TABLE `kelompok_siswa` (
 INSERT INTO `kelompok_siswa` (`id_kls_siswa`, `nis`) VALUES
 (6, 00291),
 (7, 00215),
-(9, 00082);
+(9, 00082),
+(5, 00123),
+(5, 12345);
 
 -- --------------------------------------------------------
 
@@ -193,7 +220,8 @@ CREATE TABLE `mata_pelajaran` (
 --
 
 INSERT INTO `mata_pelajaran` (`id_mapel`, `nama_mapel`, `kelompok_mapel`, `kkm`) VALUES
-(1, 'Matematika', 'muatan nasional', 75);
+(1, 'Matematika', 'muatan nasional', 75),
+(2, 'Bahasa Inggris', 'muatan nasional', 78);
 
 -- --------------------------------------------------------
 
@@ -267,7 +295,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id_user`, `nama_user`, `username`, `password`, `jabatan`) VALUES
 (3, '', 'admin', 'admin', 'admin'),
-(5, 'dicky211', '9012', '19980419', 'Wali Kelas'),
+(5, 'dicky211', '9012', '19980419', 'wali_kelas'),
 (6, 'AHMAD', '90212', '19980419', 'waka'),
 (7, 'rudy', '00291', '20051212', 'siswa'),
 (8, 'krisna', '00292', '12121212', 'siswa'),
@@ -278,6 +306,12 @@ INSERT INTO `user` (`id_user`, `nama_user`, `username`, `password`, `jabatan`) V
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `absensi`
+--
+ALTER TABLE `absensi`
+  ADD PRIMARY KEY (`id_absensi`);
 
 --
 -- Indexes for table `ekstrakulikuler`
@@ -345,6 +379,12 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `absensi`
+--
+ALTER TABLE `absensi`
+  MODIFY `id_absensi` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `ekstrakulikuler`
 --
 ALTER TABLE `ekstrakulikuler`
@@ -354,31 +394,31 @@ ALTER TABLE `ekstrakulikuler`
 -- AUTO_INCREMENT for table `jadwal_pelajaran`
 --
 ALTER TABLE `jadwal_pelajaran`
-  MODIFY `id_jdwl_pljr` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jdwl_pljr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jurusan`
 --
 ALTER TABLE `jurusan`
-  MODIFY `id_jurusan` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_jurusan` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_kelas` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `kelas_siswa`
 --
 ALTER TABLE `kelas_siswa`
-  MODIFY `id_kls_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_kls_siswa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `mata_pelajaran`
 --
 ALTER TABLE `mata_pelajaran`
-  MODIFY `id_mapel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_mapel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tahun_ajaran`

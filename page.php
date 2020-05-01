@@ -59,6 +59,15 @@
         case 'absensi':
         include_once 'page/absensi/absensi.php';
         break;
+
+        case 'setup':
+        include_once 'page/setup/setup.php';
+        break;
+
+
+        case 'nilai':
+        include_once 'page/nilai/nilai-siswa.php';
+        break;
       }
     }
 ?>

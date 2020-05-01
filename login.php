@@ -86,10 +86,11 @@
 </script>
 </body>
 </html>
+
 <?php 
   // die($_POST['login']);
   if(isset($_POST['login'])){
-    echo 'ayam';
+
     $username = $_POST['username'];
     $password = $_POST['password'];
     $sql = $koneksi->query("select * from user where username ='$username' and password='$password'");
@@ -101,27 +102,39 @@
     
     if ($ketemu >=1) {
 
+      $_SESSION['nip'] = $data['username'];
+        
       $_SESSION['id'] = $data['id_user'];
       if ($data['jabatan'] == "admin") {
         $_SESSION['jabatan'] = 'admin';
-        header("Location: index.php"); 
+
+
+  header("location: index.php");
+     
+
+      
 
       }else if ($data['jabatan'] == 'waka') {
         $_SESSION['jabatan'] = 'waka';
-        header("Location: index.php"); 
-
+       
+        header("location: index.php");
       }else if ($data['jabatan'] == "siswa"){
         $_SESSION['jabatan'] = 'siswa';
         header("location: index.php");
 
-       }else if ($data['jabatan'] == "guru"){
-        $_SESSION['jabatan'] = 'guru';
+       }else if ($data['jabatan'] == "guru_pengajar"){
+        $_SESSION['jabatan'] = 'wali_kelas';
+        header("location: index.php");
+
+        }else if ($data['jabatan'] == "wali_kelas"){
+        $_SESSION['jabatan'] = 'wali_kelas';
         header("location: index.php");
 
        }else if ($data['jabatan'] == "kepsek"){
         $_SESSION['jabatan'] = 'kepsek';
         header("location: index.php");
 	   }
+
     }else{
     
     ?>

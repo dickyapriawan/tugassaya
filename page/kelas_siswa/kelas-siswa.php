@@ -105,11 +105,10 @@ if (isset($_POST['btn_tambah_kelas_siswa'])) {
                     <label class="col-sm-3 control-label">Nama Kelas</label>
                     <div class="col-sm-9">
                     	<input type="hidden" name="txt_id_kelas_siswa" value="<?= $data_kelas_siswa['id_kls_siswa'];?>">
-                      <select class="form-control" name="txt_nama_kelas" required="" id="pilih-kelas">
-                        <option value="">Pilih Nama Kelas</option>
-
+                      <select class="form-control" name="txt_nama_kelas" required="" id="pilih-kelas-edit">
+                       
                         <?php foreach ($kelas as $data_kelas): ?>
-                        <option value="<?= $data_kelas['id_kelas'];?>" <?php if ($data_kelas['id_kelas'] == $data_kelas['id_kelas']){ echo "selected";}?> ><?= $data_kelas['nama_kelas'];?></option>
+                        <option value="<?= $data_kelas['id_kelas'];?>" <?php if ($data_kelas['id_kelas'] == $data_kelas_siswa['id_kelas']){ echo "selected";}?> ><?= $data_kelas['nama_kelas'];?></option>
                         <?php endforeach ?>
                       </select>
                     </div>
@@ -141,17 +140,17 @@ if (isset($_POST['btn_tambah_kelas_siswa'])) {
                   <div class="form-group row">
                     <label class="col-sm-3 control-label">Ruangan</label>
                     <div class="col-sm-9">
-                      <select class="form-control" name="txt_ruangan" id="ruangan" required="">
-                       
-                      </select>
+                      <input type="text" class="form-control" name="txt_ruangan" value="<?= $data_kelas_siswa['ruangan'];?>" id="ruangan-edit"  placeholder="Ruangan" required="">
                     </div>
                   </div>
                    <div class="form-group row">
                     <label class="col-sm-3 control-label">Jurusan</label>
                     <div class="col-sm-9">
-                      <select class="form-control" name="txt_jurusan" id="jurusan" required="" >
+                      <select class="form-control" name="txt_jurusan" id="jurusan-edit" required="" >
 
-                       
+                       <?php foreach ($jurusan as $data_jurusan): ?>
+                        <option value="<?= $data_jurusan['id_jurusan'];?>" <?php if ($data_jurusan['id_jurusan'] == $data_kelas_siswa['id_jurusan']){ echo "selected";}?> ><?= $data_jurusan['nama_jurusan'];?></option>
+                        <?php endforeach ?>
                       </select>
                     </div>
                   </div>
@@ -230,7 +229,7 @@ if (isset($_POST['btn_tambah_kelas_siswa'])) {
                     <div class="form-group row">
                     <label class="col-sm-3 control-label">Jurusan</label>
                     <div class="col-sm-9">
-                      <select class="form-control" name="txt_jurusan" id="jurusan" required="" >
+                      <select class="form-control" name="txt_jurusan" id="jurusan" required="">
 
                        
                       </select>
@@ -240,7 +239,7 @@ if (isset($_POST['btn_tambah_kelas_siswa'])) {
                    <div class="form-group row">
                     <label class="col-sm-3 control-label">Ruangan</label>
                     <div class="col-sm-9">
-                      <select class="form-control" name="txt_ruangan" id="ruangan" required="" >
+                      <select class="form-control" name="txt_ruangan" id="ruangan" required="">
 
                       
                       </select>
